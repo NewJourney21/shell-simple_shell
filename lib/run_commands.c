@@ -33,7 +33,7 @@ void print_commands(char **clist, long csize)
 	long i = 0;
 
 	printf("\nArray list:");
-	while (i < csize)
+	while (i <= csize)
 	{
 		printf("\n%ld: %s", i, clist[i]);
 		i++;

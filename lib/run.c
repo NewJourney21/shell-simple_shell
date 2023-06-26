@@ -68,7 +68,7 @@ int exec_process(char **cmd, long size)
 {
 	cmd[size] = NULL;
 
-	if (execve("/bin/ls", cmd, NULL) == -1)
+	if (execve(cmd[0], cmd, NULL) == -1)
 	{
 		dprintf(2, "Error\n");
 		return (-1);

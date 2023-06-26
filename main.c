@@ -36,14 +36,21 @@ int main(int ac, char **av, char **env)
 	{
 		while (open)
 		{
-			printf("$ ");
+			dprintf(1, "$ ");
 			fflush(stdout);
 
 			line = _getline();
-			if (*line == EOF || line[0] == '\0')
+			if (*line == EOF)
 			{
+				printf("here...");
 				open = 0;
-				printf("\n");
+				dprintf(1, "\n");
+				continue;
+			}
+
+			if (*line == '\0')
+			{
+				dprintf(1, "\n");
 				continue;
 			}
 
@@ -64,7 +71,7 @@ int main(int ac, char **av, char **env)
 		}
 		else
 		{
-			printf("\nError");
+			dprintf(2, "Error\n");
 		}
 	}
 
@@ -83,7 +90,7 @@ int exec_run_commands(char ***clist, long csize, char ***env)
 {
 	if (clist == NULL)
 	{
-		printf("\nError: Unable to split command list ");
+		dprintf(2, "Error: Unable to split command list\n");
 	}
 	else
 	{
@@ -94,7 +101,7 @@ int exec_run_commands(char ***clist, long csize, char ***env)
 
 		if (run_commands(clist, csize, env) == -1)
 		{
-			printf("\nError");
+			dprintf(2, "Error\n");
 		}
 	}
 
