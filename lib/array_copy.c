@@ -26,7 +26,7 @@ int array_copy(char ***dest, char ***src, long size, int start, int end)
 
 	if (*dest == NULL)
 	{
-		*dest = calloc(size, (sizeof(char *) * width));
+		*dest = calloc(width, sizeof(char *));
 		if (*dest == NULL)
 		{
 			return (-1);
@@ -35,7 +35,7 @@ int array_copy(char ***dest, char ***src, long size, int start, int end)
 	}
 	else
 	{
-		*dest = reallocarray(*dest, size, (sizeof(char *) * width));
+		*dest = reallocarray(*dest, width, sizeof(char *));
 		if (*dest == NULL)
 		{
 			free_array(dest, size);
