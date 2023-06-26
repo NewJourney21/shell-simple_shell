@@ -12,5 +12,6 @@ int run_commands(char ***, long);
 int run(char **cmd, long size);
 void free_array(char ***arr, int size);
 int append_path(char ***, long);
+int array_copy(char ***dest, char ***src, long size, int start, int end);
 
 #endif
