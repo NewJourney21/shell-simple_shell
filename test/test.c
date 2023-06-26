@@ -58,21 +58,24 @@ void test(int i)
 			test_strcmp();
 			break;
 		case 3:
-			test_strlen();
+			test_strncmp();
 			break;
 		case 4:
-			test_strcpy();
+			test_strlen();
 			break;
 		case 5:
-			test_strtok();
+			test_strcpy();
 			break;
 		case 6:
-			test_strcat();
+			test_strtok();
 			break;
 		case 7:
-			test_run();
+			test_strcat();
 			break;
 		case 8:
+			test_run();
+			break;
+		case 9:
 			test_append_path();
 			break;
 		default:
@@ -89,10 +92,11 @@ void print_intro(void)
 	printf("Testing Unix Shell Interpreter\n\n");
 	printf("Press 1: to test _getline\n");
 	printf("Press 2: to test _strcmp\n");
-	printf("Press 3: to test _strlen\n");
-	printf("Press 4: to test _strcpy\n");
-	printf("Press 5: to test _strtok\n");
-	printf("Press 6: to test _strcat\n");
-	printf("Press 7: to test run\n");
-	printf("Press 8: to test append path\n");
+	printf("Press 3: to test _strncmp\n");
+	printf("Press 4: to test _strlen\n");
+	printf("Press 5: to test _strcpy\n");
+	printf("Press 6: to test _strtok\n");
+	printf("Press 7: to test _strcat\n");
+	printf("Press 8: to test run\n");
+	printf("Press 9: to test append path\n");
 }

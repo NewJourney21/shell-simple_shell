@@ -34,10 +34,13 @@ int append_path(char ***cmd, long size)
 
 			if (append)
 			{
-				*(*cmd + i) = _strcat(path,  *(*cmd + i));
-				if (*(*cmd + i) == NULL)
+				if (_strncmp(path, *(*cmd + i), 5) != 0)
 				{
-					return (-1);
+					*(*cmd + i) = _strcat(path,  *(*cmd + i));
+					if (*(*cmd + i) == NULL)
+					{
+						return (-1);
+					}
 				}
 				append = 0;
 			}

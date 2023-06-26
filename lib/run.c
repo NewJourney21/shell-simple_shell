@@ -27,7 +27,7 @@ int run(char **cmd, long size)
 
 	if (stat(cmd[0], &st) != 0)
 	{
-		printf("\nbash: %s: command not found", cmd[0]);
+		printf("\nbash: %s: command not found\n", cmd[0]);
 		return (-1);
 	}
 	else

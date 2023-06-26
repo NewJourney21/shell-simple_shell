@@ -3,6 +3,7 @@
 #include "lib/lib.h"
 #include "lib/getline.c"
 #include "lib/strcmp.c"
+#include "lib/strncmp.c"
 #include "lib/strlen.c"
 #include "lib/strcpy.c"
 #include "lib/strtok.c"
