@@ -6,7 +6,11 @@
 #include "lib/strlen.c"
 #include "lib/strcpy.c"
 #include "lib/strtok.c"
+#include "lib/strcat.c"
 #include "lib/run_commands.c"
+#include "lib/append_path.c"
+#include "lib/run.c"
+#include "lib/free_array.c"
 
 /**
  * main - entry point
@@ -19,20 +23,18 @@ int main(void)
 	long csize = 0;
 	char *line = NULL;
 	int open = 1;
-	char *quit = "q";
 
 	while (open)
 	{
-		printf("\nType q to exit (This is a temporary exit approach)\n\n");
 		printf("$ ");
 		fflush(stdout);
 
 		line = _getline();
-		printf("\nYou entered %s", line); /** To be deleted **/
-
-		if (*line == EOF || _strcmp(line, quit) == 0)
+		if (*line == EOF || line[0] == '\0')
 		{
 			open = 0;
+			printf("\n");
+			continue;
 		}
 
 		csize = _strtok(&clist, line, " ");
@@ -42,10 +44,8 @@ int main(void)
 		}
 		else
 		{
-			run_commands(clist, csize);
-		}		
-
-		printf("\n");
+			run_commands(&clist, csize);
+		}
 	}
 
 	return (0);

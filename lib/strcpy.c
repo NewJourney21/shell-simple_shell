@@ -22,7 +22,7 @@ char *_strcpy(char *dest, char *src)
 	{
 		int len = _strlen(src);
 
-		dest = malloc(sizeof(char) * len);
+		dest = malloc((sizeof(char) * len) + 1);
 
 		if (dest == NULL)
 		{
@@ -36,7 +36,7 @@ char *_strcpy(char *dest, char *src)
 		i++;
 	}
 
-	*(dest + i + 1) = '\0';
+	*(dest + i) = '\0';
 
 	return (dest);
 }

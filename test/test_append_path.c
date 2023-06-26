@@ -4,16 +4,15 @@
 #include "../lib/lib.h"
 
 /**
- * test_strtok - test strtok
+ * test_append_path - test append path
  */
-void test_strtok(void)
+void test_append_path(void)
 {
 	char **arr = NULL;
-	char *s = "hi this is Chibuzor. Sup";
-	int i = 0;
+	char *s = "";
 	int count = 0;
+	int i = 0;
 	char *delim = " ";
-
 	size_t len = 0;
 	int n = 0;
 
@@ -24,6 +23,7 @@ void test_strtok(void)
 		printf("Error: Unable to read line");
 		exit(EXIT_FAILURE);
 	}
+	fflush(stdout);
 
 	count = _strtok(&arr, s, delim);
 
@@ -33,9 +33,14 @@ void test_strtok(void)
 	}
 	else
 	{
+		int err = append_path(&arr, count);
+
+		if (err == -1)
+			printf("Error appending path");
+
 		while (i < count)
 		{
-			printf("\n%d: %s", i, arr[i]);
+			printf("\n%i: %s", i, arr[i]);
 			i++;
 		}
 	}

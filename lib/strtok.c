@@ -4,7 +4,6 @@
 
 int add_char(char c, char **word, int *wc);
 int add_word(char ***arr, long *pos, char *word, int *wc);
-void free_array(char ***arr, int size);
 
 /**
  * _strtok - function to split string to an array
@@ -27,7 +26,7 @@ long _strtok(char ***arr, char *line, char *delim)
 
 	if (delim == NULL)
 	{
-		*arr = malloc(sizeof(line));
+		*arr = malloc(sizeof(char *));
 		if (*arr == NULL)
 			return (0);
 
@@ -63,14 +62,20 @@ int add_char(char c, char **word, int *wc)
 {
 	if (*wc == 0)
 	{
-		*word = malloc(sizeof(char));
-		if (word == NULL)
-		{
-			return (-1);
-		}
+		*word = malloc(sizeof(char) + 1);
+	}
+	else
+	{
+		*word = realloc(*word, ((sizeof(char) * (*wc)) + 2));
+	}
+
+	if (*word == NULL)
+	{
+		return (-1);
 	}
 
 	*(*word + *wc) = c;
+	*(*word + *wc + 1) = '\0';
 	*wc += 1;
 
 	return (1);
@@ -111,7 +116,7 @@ int add_word(char ***arr, long *pos, char *word, int *wc)
 	if (*pos < 0 || *wc < 0 || word == NULL)
 		return (-1);
 
-	*(*arr + *pos) = malloc(sizeof(char) * (*wc));
+	*(*arr + *pos) = malloc((sizeof(char) * (*wc)) + 1);
 	if (*(*arr + *pos) == NULL)
 	{
 		free_array(arr, *pos);
@@ -129,19 +134,3 @@ int add_word(char ***arr, long *pos, char *word, int *wc)
 
 	return (1);
 }
-
-/**
- * free_array - function to release array memory
- * @arr: array
- * @size: the array size
- */
-void free_array(char ***arr, int size)
-{
-	int i = 0;
-
-	for (i = 0; i < size; i++)
-	{
-		free((*arr)[i]);
-	}
-}
-

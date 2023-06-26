@@ -4,13 +4,12 @@
 #include "../lib/lib.h"
 
 /**
- * test_strtok - test strtok
+ * test_run - test run command
  */
-void test_strtok(void)
+void test_run(void)
 {
 	char **arr = NULL;
-	char *s = "hi this is Chibuzor. Sup";
-	int i = 0;
+	char *s = "";
 	int count = 0;
 	char *delim = " ";
 
@@ -24,6 +23,7 @@ void test_strtok(void)
 		printf("Error: Unable to read line");
 		exit(EXIT_FAILURE);
 	}
+	fflush(stdout);
 
 	count = _strtok(&arr, s, delim);
 
@@ -33,11 +33,7 @@ void test_strtok(void)
 	}
 	else
 	{
-		while (i < count)
-		{
-			printf("\n%d: %s", i, arr[i]);
-			i++;
-		}
+		run(arr, count);
 	}
 
 	printf("\nvalue: %s\n", s);

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "lib.h"
 
 void print_commands(char **clist, long csize);
 
@@ -9,9 +10,14 @@ void print_commands(char **clist, long csize);
  *
  * Return: 1
  */
-int run_commands(char **clist, long csize)
+int run_commands(char ***clist, long csize)
 {
-	print_commands(clist, csize); /** delete this */
+	if (append_path(clist, csize) == -1)
+	{
+		return (-1);
+	}
+
+	run(*clist, csize);
 
 	return (1);
 }
