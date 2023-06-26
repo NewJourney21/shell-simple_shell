@@ -4,15 +4,18 @@
 #include "test.h"
 #include "../lib/lib.h"
 
-void test(int i);
+void test(int i, char ***env);
 void print_intro(void);
 
 /**
  * main - test file
+ * @ac: arg
+ * @av: arg
+ * @env: arg
  *
  * Return: 0
  */
-int main(int ac, char *av[])
+int main(int ac, char *av[], char **env)
 {
 	int i;
 
@@ -39,18 +42,22 @@ int main(int ac, char *av[])
 		i = *av[1] - 48;
 	}
 
-	test(i);
-	return(0);
+	test(i, &env);
+	return (0);
 }
 
 /**
  * test - switch input
  * @i: input value
+ * @env: the address of the environment variabls
  */
-void test(int i)
+void test(int i, char ***env)
 {
 	switch (i)
 	{
+		case 0:
+			test_print_env(env);
+			break;
 		case 1:
 			test_getline();
 			break;
@@ -73,7 +80,7 @@ void test(int i)
 			test_strcat();
 			break;
 		case 8:
-			test_run();
+			test_run(env);
 			break;
 		case 9:
 			test_append_path();
@@ -90,6 +97,7 @@ void test(int i)
 void print_intro(void)
 {
 	printf("Testing Unix Shell Interpreter\n\n");
+	printf("Press 0: to test _prin_env\n");
 	printf("Press 1: to test _getline\n");
 	printf("Press 2: to test _strcmp\n");
 	printf("Press 3: to test _strncmp\n");

@@ -8,10 +8,14 @@ char *_strcpy(char *dest, char *src);
 /*char **_strtok(char *line, char *delim);*/
 long _strtok(char ***arr, char *line, char *delim);
 char *_strcat(char *s1, char *s2);
-int run_commands(char ***, long);
-int run(char **cmd, long size);
+int run_commands(char ***, long, char ***);
+int run(char **cmd, long size, char ***);
 void free_array(char ***arr, int size);
 int append_path(char ***, long);
 int array_copy(char ***dest, char ***src, long size, int start, int end);
+void _print_env(char ***);
+int _set_env(char *, char ***);
+int _set_env(char *var, char ***);
+int _unset_env(char *var, char ***);
 
 #endif

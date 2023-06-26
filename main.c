@@ -13,17 +13,19 @@
 #include "lib/run.c"
 #include "lib/free_array.c"
 #include "lib/array_copy.c"
+#include "lib/print_env.c"
 
-int exec_run_commands(char ***clist, long csize);
+int exec_run_commands(char ***, long, char ***);
 
 /**
  * main - entry point
  * @ac: argument count
  * @av: argument list
+ * @env: the environment variables
  *
  * Return: 0
  */
-int main(int ac, char **av)
+int main(int ac, char **av, char **env)
 {
 	char **clist = NULL;
 	long csize = 0;
@@ -46,7 +48,7 @@ int main(int ac, char **av)
 			}
 
 			csize = _strtok(&clist, line, " ");
-			if (exec_run_commands(&clist, csize) == 0)
+			if (exec_run_commands(&clist, csize, &env) == 0)
 			{
 				open = 0;
 				continue;
@@ -58,7 +60,7 @@ int main(int ac, char **av)
 		csize = array_copy(&clist, &av, csize, 1, ac - 1);
 		if (csize != -1)
 		{
-			exec_run_commands(&clist, csize);
+			exec_run_commands(&clist, csize, &env);
 		}
 		else
 		{
@@ -73,10 +75,11 @@ int main(int ac, char **av)
  * exec_run_commands - function to execute run_commands
  * @clist: the command list
  * @csize: the array size
+ * @env: the address of the environment variables
  *
  * Return: status
  */
-int exec_run_commands(char ***clist, long csize)
+int exec_run_commands(char ***clist, long csize, char ***env)
 {
 	if (clist == NULL)
 	{
@@ -89,7 +92,7 @@ int exec_run_commands(char ***clist, long csize)
 			return (0);
 		}
 
-		if (run_commands(clist, csize) == -1)
+		if (run_commands(clist, csize, env) == -1)
 		{
 			printf("\nError");
 		}

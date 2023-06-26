@@ -5,8 +5,9 @@
 
 /**
  * test_run - test run command
+ * @env: the address of the environment variables
  */
-void test_run(void)
+void test_run(char ***env)
 {
 	char **arr = NULL;
 	char *s = "";
@@ -33,7 +34,7 @@ void test_run(void)
 	}
 	else
 	{
-		run(arr, count);
+		run(arr, count, env);
 	}
 
 	printf("\nvalue: %s\n", s);
