@@ -25,6 +25,11 @@ int run(char **cmd, long size)
 		return (-1);
 	}
 
+	if (_strcmp(cmd[0], "exit") == 0)
+	{
+		return (0);
+	}
+
 	if (stat(cmd[0], &st) != 0)
 	{
 		printf("\nbash: %s: command not found\n", cmd[0]);

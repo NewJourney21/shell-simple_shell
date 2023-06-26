@@ -14,13 +14,12 @@
 #include "lib/free_array.c"
 #include "lib/array_copy.c"
 
-void exec_run_commands(char ***clist, long csize);
+int exec_run_commands(char ***clist, long csize);
 
 /**
  * main - entry point
  * @ac: argument count
  * @av: argument list
- * @env: environment vairable
  *
  * Return: 0
  */
@@ -47,12 +46,17 @@ int main(int ac, char **av)
 			}
 
 			csize = _strtok(&clist, line, " ");
-			exec_run_commands(&clist, csize);
+			if (exec_run_commands(&clist, csize) == 0)
+			{
+				open = 0;
+				continue;
+			}
 		}
 	}
 	else
 	{
-		if ((csize = array_copy(&clist, &av, csize, 1, ac - 1)) != -1)
+		csize = array_copy(&clist, &av, csize, 1, ac - 1);
+		if (csize != -1)
 		{
 			exec_run_commands(&clist, csize);
 		}
@@ -69,8 +73,10 @@ int main(int ac, char **av)
  * exec_run_commands - function to execute run_commands
  * @clist: the command list
  * @csize: the array size
+ *
+ * Return: status
  */
-void exec_run_commands(char ***clist, long csize)
+int exec_run_commands(char ***clist, long csize)
 {
 	if (clist == NULL)
 	{
@@ -78,9 +84,16 @@ void exec_run_commands(char ***clist, long csize)
 	}
 	else
 	{
+		if (_strcmp("exit", (*clist)[0]) == 0)
+		{
+			return (0);
+		}
+
 		if (run_commands(clist, csize) == -1)
 		{
 			printf("\nError");
 		}
 	}
+
+	return (1);
 }
