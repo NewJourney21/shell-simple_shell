@@ -11,18 +11,16 @@ int exec_custom_commands(char **cmd, char ***env);
 /**
  * run - function to executes a command
  * @cmd: the command represented as an array
- * @size: the size of the command list
  * @env: the address of the environment variables
  *
  * Return: 1
  */
-int run(char **cmd, long size, char ***env)
+int run(char **cmd, char ***env)
 {
 	struct stat st;
 	int status;
 	pid_t cid;
 
-	printf("%ld", size);
 	if (cmd == NULL || (cmd != NULL && cmd[0] == NULL))
 	{
 		return (-1);

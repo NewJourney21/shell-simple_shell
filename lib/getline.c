@@ -19,7 +19,7 @@ char *_getline()
 	unsigned long int limit = sizeof(char) * max;
 	int size = limit;
 
-	b = calloc(size, sizeof(char));
+	b = malloc(size * sizeof(char));
 	if (b == NULL)
 	{
 		return (NULL);
@@ -32,7 +32,7 @@ char *_getline()
 		{
 			ex++;
 			size = ex * limit;
-			temp = calloc(size, sizeof(char));
+			temp = malloc(size * sizeof(char));
 			if (temp == NULL)
 			{
 				free(b);

@@ -39,6 +39,7 @@ int main(int ac, char **av, char **env)
 		{
 			_puts(1, "$ ");
 			line = _getline();
+			fflush(stdout);
 			if (*line == EOF)
 			{
 				free(line);
@@ -96,6 +97,7 @@ int exec_run_commands(char ***clist, long csize, char ***env)
 		if (_strcmp("exit", (*clist)[0]) == 0)
 		{
 			free(*clist);
+			exit(EXIT_SUCCESS);
 			return (0);
 		}
 
