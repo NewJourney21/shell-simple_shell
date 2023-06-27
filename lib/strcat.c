@@ -15,7 +15,7 @@ char *_strcat(char *s1, char *s2)
 	unsigned int j = 0;
 	unsigned int sum1 = _strlen(s1);
 	unsigned int sum2 = _strlen(s2);
-	char *s;
+	char *s = NULL;
 
 	if (s1 == NULL && s2 == NULL)
 		return (NULL);
@@ -37,7 +37,7 @@ char *_strcat(char *s1, char *s2)
 		j++;
 	}
 
-	*(s + i + 1) = '\0';
+	*(s + i) = '\0';
 
 	s1 = NULL;
 	s1 = _strcpy(s1, s);

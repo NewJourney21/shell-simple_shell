@@ -12,18 +12,21 @@
 char *_strcpy(char *dest, char *src)
 {
 	unsigned int i = 0;
+	int len = 0;
 
 	if (dest == NULL && src == NULL)
 	{
 		return (NULL);
 	}
 
+	if (src == NULL)
+		return (NULL);
+
 	if (dest == NULL)
 	{
-		int len = _strlen(src);
+		len = _strlen(src);
 
-		dest = malloc((sizeof(char) * len) + 1);
-
+		dest = malloc(sizeof(char) * (len + 1));
 		if (dest == NULL)
 		{
 			return (NULL);

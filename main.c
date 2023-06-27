@@ -14,6 +14,7 @@
 #include "lib/free_array.c"
 #include "lib/array_copy.c"
 #include "lib/print_env.c"
+#include "lib/puts.c"
 
 int exec_run_commands(char ***, long, char ***);
 
@@ -36,25 +37,23 @@ int main(int ac, char **av, char **env)
 	{
 		while (open)
 		{
-			dprintf(1, "$ ");
-			fflush(stdout);
-
+			_puts(1, "$ ");
 			line = _getline();
 			if (*line == EOF)
 			{
-				printf("here...");
+				free(line);
 				open = 0;
-				dprintf(1, "\n");
+				_puts(1, "\n");
 				continue;
 			}
-
 			if (*line == '\0')
 			{
-				dprintf(1, "\n");
+				free(line);
+				_puts(1, "\n");
 				continue;
 			}
-
 			csize = _strtok(&clist, line, " ");
+			free(line);
 			if (exec_run_commands(&clist, csize, &env) == 0)
 			{
 				open = 0;
@@ -62,19 +61,19 @@ int main(int ac, char **av, char **env)
 			}
 		}
 	}
+	else if (ac == 0 || av == NULL)
+	{
+		_puts(2, "Error: too few arguments supplied\n");
+		return (-1);
+	}
 	else
 	{
-		csize = array_copy(&clist, &av, csize, 1, ac - 1);
+		csize = array_copy(&clist, &av, ac, 1, ac - 1);
 		if (csize != -1)
-		{
 			exec_run_commands(&clist, csize, &env);
-		}
 		else
-		{
-			dprintf(2, "Error\n");
-		}
+			_puts(2, "Error(array_copy)\n");
 	}
-
 	return (0);
 }
 
@@ -90,18 +89,19 @@ int exec_run_commands(char ***clist, long csize, char ***env)
 {
 	if (clist == NULL)
 	{
-		dprintf(2, "Error: Unable to split command list\n");
+		_puts(2, "Error: Unable to split command list\n");
 	}
 	else
 	{
 		if (_strcmp("exit", (*clist)[0]) == 0)
 		{
+			free(*clist);
 			return (0);
 		}
 
 		if (run_commands(clist, csize, env) == -1)
 		{
-			dprintf(2, "Error\n");
+			_puts(2, "Error(run command)\n");
 		}
 	}
 

@@ -11,8 +11,22 @@ void free_array(char ***arr, int size)
 {
 	int i = 0;
 
-	for (i = 0; i < size; i++)
+	if (*arr != NULL)
 	{
-		free((*arr)[i]);
+		if (size != 0)
+		{
+			for (i = 0; i < size; i++)
+			{
+				free((*arr)[i]);
+			}
+		}
+		else
+		{
+			while ((*arr)[i] != NULL)
+			{
+				free((*arr)[i]);
+				i++;
+			}
+		}
 	}
 }

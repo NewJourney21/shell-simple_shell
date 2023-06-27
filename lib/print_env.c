@@ -14,7 +14,8 @@ void _print_env(char ***env)
 	{
 		while ((*env)[i] != NULL)
 		{
-			dprintf(1, "%s\n", (*env)[i]);
+			_puts(1, (*env)[i]);
+			_puts(1, "\n");
 			i++;
 		}
 	}

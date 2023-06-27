@@ -17,5 +17,7 @@ void _print_env(char ***);
 int _set_env(char *, char ***);
 int _set_env(char *var, char ***);
 int _unset_env(char *var, char ***);
+int _puts(int, char *);
+int _putchar(int, char);
 
 #endif

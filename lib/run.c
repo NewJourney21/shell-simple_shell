@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 #include "lib.h"
 
-int exec_process(char **cmd, long size);
+int exec_process(char **cmd);
 int exec_custom_commands(char **cmd, char ***env);
 
 /**
@@ -22,7 +22,8 @@ int run(char **cmd, long size, char ***env)
 	int status;
 	pid_t cid;
 
-	if (cmd[0] == NULL)
+	printf("%ld", size);
+	if (cmd == NULL || (cmd != NULL && cmd[0] == NULL))
 	{
 		return (-1);
 	}
@@ -41,17 +42,17 @@ int run(char **cmd, long size, char ***env)
 		cid = fork();
 		if (cid == -1)
 		{
-			dprintf(2, "Error creating proces\n");
+			_puts(2, "Error creating process\n");
 			return (-1);
 		}
 		else if (cid == 0)
 		{
-			return (exec_process(cmd, size));
+			return (exec_process(cmd));
 		}
 		else
 		{
 			wait(&status);
-			free_array(&cmd, size);
+			free_array(&cmd, 0);
 		}
 	}
 	return (1);
@@ -60,17 +61,14 @@ int run(char **cmd, long size, char ***env)
 /**
  * exec_process - function to execute a process
  * @cmd: command array
- * @size: command array size
  *
  * Return: an integer
  */
-int exec_process(char **cmd, long size)
+int exec_process(char **cmd)
 {
-	cmd[size] = NULL;
-
 	if (execve(cmd[0], cmd, NULL) == -1)
 	{
-		dprintf(2, "Error\n");
+		_puts(2, "Error(exec)\n");
 		return (-1);
 	}
 	return (1);
@@ -92,7 +90,7 @@ int exec_custom_commands(char **cmd, char ***env)
 		if (cmd[1] == NULL || cmd[2] == NULL ||
 		cmd[1][0] == '\0' || cmd[2][0] == '\0')
 		{
-			dprintf(2, "Error:Usage: setenv [name] [value]\n");
+			_puts(2, "Error:Usage: setenv [name] [value]\n");
 		}
 
 		var = _strcat(cmd[1], "=");
@@ -113,15 +111,16 @@ int exec_custom_commands(char **cmd, char ***env)
 	{
 		if (cmd[1] == NULL || cmd[1][0] == '\0')
 		{
-			dprintf(2, "Error:Usage: unset [name]\n");
+			_puts(2, "Error:Usage: unset [name]\n");
 		}
 
 		return (_unset_env(cmd[1], env));
-
 	}
 	else
 	{
-		dprintf(2, "bash: %s: command not found\n", cmd[0]);
+		_puts(2, "bash: ");
+		_puts(2, cmd[0]);
+		_puts(2, ": command not found\n");
 		return (-1);
 	}
 }

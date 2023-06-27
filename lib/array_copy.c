@@ -16,7 +16,7 @@
 int array_copy(char ***dest, char ***src, long size, int start, int end)
 {
 	int i = 0;
-	int width = end - start + 1;
+	int width = end - start + 2;
 	int len = 0;
 
 	if (start > end)
@@ -43,16 +43,16 @@ int array_copy(char ***dest, char ***src, long size, int start, int end)
 		}
 	}
 
-	for (i = 0; i < width; i++)
+	for (i = 0; i < width - 1; i++)
 	{
 		*(*dest + i) = _strcpy(*(*dest + i), *(*src + i + start));
 		if (*(*dest + i) == NULL)
 		{
-			free_array(dest, i - 1);
+			free_array(dest, width);
 			return (-1);
 		}
 		len++;
 	}
-
+	*(*dest + width - 1) = NULL;
 	return (len);
 }

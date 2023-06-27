@@ -16,37 +16,37 @@ int append_path(char ***cmd, long size)
 	int i = 0;
 	int append = 1;
 
-	if (cmd != NULL)
+	if (cmd == NULL)
+		return (-1);
+
+	while (i < size)
 	{
-		while (i < size)
+		if ((
+			(_strcmp(*(*cmd + i), "|") == 0) ||
+			(_strcmp(*(*cmd + i), "&") == 0) ||
+			(_strcmp(*(*cmd + i), "||") == 0) ||
+			(_strcmp(*(*cmd + i), "&&") == 0)
+		) && i < size - 1 && i != 0 && append == 0)
 		{
-			if ((
-				(_strcmp(*(*cmd + i), "|") == 0) ||
-				(_strcmp(*(*cmd + i), "&") == 0) ||
-				(_strcmp(*(*cmd + i), "||") == 0) ||
-				(_strcmp(*(*cmd + i), "&&") == 0)
-			) && i < size - 1 && i != 0 && append == 0)
-			{
-				append = 1;
-				i++;
-				continue;
-			}
-
-			if (append)
-			{
-				if (_strncmp(path, *(*cmd + i), 5) != 0)
-				{
-					*(*cmd + i) = _strcat(path,  *(*cmd + i));
-					if (*(*cmd + i) == NULL)
-					{
-						return (-1);
-					}
-				}
-				append = 0;
-			}
-
+			append = 1;
 			i++;
+			continue;
 		}
+
+		if (append)
+		{
+			if (_strncmp(path, *(*cmd + i), 5) != 0)
+			{
+				*(*cmd + i) = _strcat(path, *(*cmd + i));
+				if (*(*cmd + i) == NULL)
+				{
+					return (-1);
+				}
+			}
+			append = 0;
+		}
+
+		i++;
 	}
 
 	return (1);

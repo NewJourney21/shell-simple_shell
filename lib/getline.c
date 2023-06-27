@@ -11,14 +11,15 @@
  */
 char *_getline()
 {
-	int max = 1024;
+	int max = 120;
 	int ex = 1;
-	char *b, *temp;
+	char *b = NULL;
+	char *temp = NULL;
 	unsigned long int n, last;
 	unsigned long int limit = sizeof(char) * max;
 	int size = limit;
 
-	b = malloc(size);
+	b = calloc(size, sizeof(char));
 	if (b == NULL)
 	{
 		return (NULL);
@@ -27,14 +28,14 @@ char *_getline()
 	while ((n = read(0, (b + (size - limit)), limit)) > 0)
 	{
 		last = size - 1;
-
 		if (n == limit && *(b + last) != '\n')
 		{
 			ex++;
 			size = ex * limit;
-			temp = malloc(size);
+			temp = calloc(size, sizeof(char));
 			if (temp == NULL)
 			{
+				free(b);
 				return (NULL);
 			}
 			_strcpy(temp, b);

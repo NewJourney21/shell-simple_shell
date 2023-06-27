@@ -92,6 +92,8 @@ int add_char(char c, char **word, int *wc)
  */
 int add_word(char ***arr, long *pos, char *word, int *wc)
 {
+	long int size = 0;
+
 	if (*wc == 0)
 	{
 		return (0);
@@ -99,16 +101,18 @@ int add_word(char ***arr, long *pos, char *word, int *wc)
 
 	if (*arr == NULL)
 	{
-		*arr = calloc(1, sizeof(char *));
+		size = 2;
+		*arr = calloc(size, sizeof(char *));
 		if (*arr == NULL)
 			return (-1);
 	}
 	else
 	{
-		*arr = reallocarray(*arr, (*pos + 1), sizeof(char *));
+		size = *pos + 2;
+		*arr = reallocarray(*arr, size, (sizeof(char *)));
 		if (*arr == NULL)
 		{
-			free_array(arr, *pos);
+			free_array(arr, 0);
 			return (-1);
 		}
 	}
@@ -119,14 +123,16 @@ int add_word(char ***arr, long *pos, char *word, int *wc)
 	*(*arr + *pos) = malloc((sizeof(char) * (*wc)) + 1);
 	if (*(*arr + *pos) == NULL)
 	{
-		free_array(arr, *pos);
+		free_array(arr, size);
 	}
 
 	if (_strcpy(*(*arr + *pos), word) == NULL)
 	{
-		free_array(arr, *pos);
+		free_array(arr, size);
 		return (-1);
 	}
+
+	(*arr)[size - 1] = NULL;
 
 	*wc = 0;
 	*pos += 1;
