@@ -17,6 +17,7 @@
 #include "lib/puts.c"
 #include "lib/print_commands.c"
 
+void run_interactive_mode(char ***, long *, char ***);
 int exec_run_commands(char ***, long, char ***);
 
 /**
@@ -32,56 +33,89 @@ int main(int ac, char **av, char **env)
 	char **clist = NULL;
 	long csize = 0;
 	char *line = NULL;
-	int open = 1;
 
-	if (ac == 1)
+	if (isatty(STDIN_FILENO))
 	{
-		while (open)
-		{
-			_puts(1, "$ ");
-			line = _getline();
-			fflush(stdout);
-			if (*line == EOF)
-			{
-				open = 0;
-				_puts(1, "\n");
-				continue;
-			}
-			if (*line == '\0')
-			{
-				free(line);
-				_puts(1, "\n");
-				continue;
-			}
-			if (clist != NULL)
-			{
-				free_array(&clist, csize + 1);
-				clist = NULL;
-			}
-			csize = _strtok(&clist, line, " ");
-			free(line);
-			if (exec_run_commands(&clist, csize, &env) == 0)
-			{
-				open = 0;
-				continue;
-			}
-		}
-	}
-	else if (ac == 0 || av == NULL)
-	{
-		_puts(2, "Error: too few arguments supplied\n");
+		run_interactive_mode(&clist, &csize, &env);
 	}
 	else
 	{
-		csize = array_copy(&clist, &av, ac, 1, ac - 1);
-		if (csize != -1)
+		line = _getline();
+
+		if (ac == 1 && (*line != '\0'))
+		{
+			csize = _strtok(&clist, line, " ");
 			exec_run_commands(&clist, csize, &env);
+		}
+		else if (ac > 1)
+		{
+			csize = array_copy(&clist, &av, ac, 1, ac - 1);
+
+			if (csize != -1)
+			{
+				exec_run_commands(&clist, csize, &env);
+			}
+			else
+			{
+				_puts(2, "Error(array_copy)\n");
+			}
+		}
 		else
-			_puts(2, "Error(array_copy)\n");
+		{
+			_puts(2, "Error: too few arguments supplied\n");
+		}
 	}
+
 	free(line);
 	free_array(&clist, csize + 1);
 	return (0);
+}
+
+/**
+ * run_interactive_mode - function to run in interactive mode
+ * @clist: the command list
+ * @csize: the command size
+ * @env: the address of the environment variables
+ */
+void run_interactive_mode(char ***clist, long *csize, char ***env)
+{
+	char *line = NULL;
+	int open = 1;
+
+	while (open)
+	{
+		_puts(1, "$ ");
+		line = _getline();
+		fflush(stdout);
+
+		if (*line == EOF)
+		{
+			open = 0;
+			_puts(1, "\n");
+			continue;
+		}
+		else if (*line == '\0')
+		{
+			free(line);
+			_puts(1,  "\n");
+			continue;
+		}
+
+		if (*clist != NULL)
+		{
+			free_array(clist, *csize + 1);
+			*clist = NULL;
+		}
+
+		*csize = _strtok(clist, line, " ");
+		free(line);
+
+		if (exec_run_commands(clist, *csize, env) == 0)
+		{
+			open = 0;
+			continue;
+		}
+	}
 }
 
 /**
@@ -107,10 +141,7 @@ int exec_run_commands(char ***clist, long csize, char ***env)
 			return (0);
 		}
 
-		if (run_commands(clist, csize, env) == -1)
-		{
-			_puts(2, "Error(run command)\n");
-		}
+		run_commands(clist, csize, env);
 	}
 
 	return (1);

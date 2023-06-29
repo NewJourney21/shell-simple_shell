@@ -67,7 +67,6 @@ int exec_process(char **cmd)
 {
 	if (execve(cmd[0], cmd, NULL) == -1)
 	{
-		_puts(2, "Error(exec)\n");
 		exit(EXIT_FAILURE);
 		return (-1);
 	}

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "lib.h"
 
 /**
  * print_commands - function to print commands
