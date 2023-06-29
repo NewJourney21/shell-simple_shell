@@ -17,6 +17,7 @@
 #include "lib/puts.c"
 #include "lib/print_commands.c"
 
+void non_interactive_mode(char ***, long *, char ***, int, char ***);
 void run_interactive_mode(char ***, long *, char ***);
 int exec_run_commands(char ***, long, char ***);
 
@@ -36,7 +37,20 @@ int main(int ac, char **av, char **env)
 
 	if (isatty(STDIN_FILENO))
 	{
-		run_interactive_mode(&clist, &csize, &env);
+		if (ac == 1)
+		{
+			run_interactive_mode(&clist, &csize, &env);
+		}
+		else if (ac == 0 || av == NULL)
+		{
+			_puts(2, "Error: too few arguments supplied\n");
+		}
+
+		else
+		{
+			non_interactive_mode(&clist, &csize, &env, ac, &av);
+		}
+
 	}
 	else
 	{
@@ -49,16 +63,7 @@ int main(int ac, char **av, char **env)
 		}
 		else if (ac > 1)
 		{
-			csize = array_copy(&clist, &av, ac, 1, ac - 1);
-
-			if (csize != -1)
-			{
-				exec_run_commands(&clist, csize, &env);
-			}
-			else
-			{
-				_puts(2, "Error(array_copy)\n");
-			}
+			non_interactive_mode(&clist, &csize, &env, ac, &av);
 		}
 		else
 		{
@@ -69,6 +74,29 @@ int main(int ac, char **av, char **env)
 	free(line);
 	free_array(&clist, csize + 1);
 	return (0);
+}
+
+/**
+ * non_interactive_mode - function to run in interactive mode
+ * @clist: the command list
+ * @csize: the command size
+ * @env: the address of the environment variables
+ * @ac: the argument count
+ * @av: the argument list
+ */
+void non_interactive_mode(
+		char ***clist, long *csize, char ***env, int ac, char ***av)
+{
+	*csize = array_copy(clist, av, ac, 1, ac - 1);
+
+	if (*csize != -1)
+	{
+		exec_run_commands(clist, *csize, env);
+	}
+	else
+	{
+		_puts(2, "Error(array_copy)\n");
+	}
 }
 
 /**
@@ -91,6 +119,7 @@ void run_interactive_mode(char ***clist, long *csize, char ***env)
 		if (*line == EOF)
 		{
 			open = 0;
+			free(line);
 			_puts(1, "\n");
 			continue;
 		}
