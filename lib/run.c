@@ -18,7 +18,7 @@ int exec_custom_commands(char **cmd, char ***env);
 int run(char **cmd, char ***env)
 {
 	struct stat st;
-	int status;
+	int status, res;
 	pid_t cid;
 
 	if (cmd == NULL || (cmd != NULL && cmd[0] == NULL))
@@ -33,7 +33,8 @@ int run(char **cmd, char ***env)
 	}
 	else if (stat(cmd[0], &st) != 0)
 	{
-		return (exec_custom_commands(cmd, env));
+		res = exec_custom_commands(cmd, env);
+		return (res);
 	}
 	else
 	{
@@ -45,12 +46,12 @@ int run(char **cmd, char ***env)
 		}
 		else if (cid == 0)
 		{
-			return (exec_process(cmd));
+			res = exec_process(cmd);
+			return (res);
 		}
 		else
 		{
 			wait(&status);
-			free_array(&cmd, 0);
 		}
 	}
 	return (1);
@@ -67,6 +68,7 @@ int exec_process(char **cmd)
 	if (execve(cmd[0], cmd, NULL) == -1)
 	{
 		_puts(2, "Error(exec)\n");
+		exit(EXIT_FAILURE);
 		return (-1);
 	}
 	return (1);

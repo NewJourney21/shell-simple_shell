@@ -29,6 +29,7 @@ char *_strcpy(char *dest, char *src)
 		dest = malloc(sizeof(char) * (len + 1));
 		if (dest == NULL)
 		{
+			free(dest);
 			return (NULL);
 		}
 	}

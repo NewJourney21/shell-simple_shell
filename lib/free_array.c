@@ -15,9 +15,15 @@ void free_array(char ***arr, int size)
 	{
 		if (size != 0)
 		{
-			for (i = 0; i < size; i++)
+			if (*arr != NULL)
 			{
-				free((*arr)[i]);
+				for (i = 0; i < size; i++)
+				{
+					if ((*arr)[i] != NULL)
+					{
+						free((*arr)[i]);
+					}
+				}
 			}
 		}
 		else
@@ -28,5 +34,6 @@ void free_array(char ***arr, int size)
 				i++;
 			}
 		}
+		free(*arr);
 	}
 }

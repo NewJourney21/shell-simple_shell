@@ -15,6 +15,7 @@
 #include "lib/array_copy.c"
 #include "lib/print_env.c"
 #include "lib/puts.c"
+#include "lib/print_commands.c"
 
 int exec_run_commands(char ***, long, char ***);
 
@@ -42,7 +43,6 @@ int main(int ac, char **av, char **env)
 			fflush(stdout);
 			if (*line == EOF)
 			{
-				free(line);
 				open = 0;
 				_puts(1, "\n");
 				continue;
@@ -52,6 +52,11 @@ int main(int ac, char **av, char **env)
 				free(line);
 				_puts(1, "\n");
 				continue;
+			}
+			if (clist != NULL)
+			{
+				free_array(&clist, csize + 1);
+				clist = NULL;
 			}
 			csize = _strtok(&clist, line, " ");
 			free(line);
@@ -65,7 +70,6 @@ int main(int ac, char **av, char **env)
 	else if (ac == 0 || av == NULL)
 	{
 		_puts(2, "Error: too few arguments supplied\n");
-		return (-1);
 	}
 	else
 	{
@@ -75,6 +79,8 @@ int main(int ac, char **av, char **env)
 		else
 			_puts(2, "Error(array_copy)\n");
 	}
+	free(line);
+	free_array(&clist, csize + 1);
 	return (0);
 }
 
@@ -96,7 +102,7 @@ int exec_run_commands(char ***clist, long csize, char ***env)
 	{
 		if (_strcmp("exit", (*clist)[0]) == 0)
 		{
-			free(*clist);
+			free_array(clist, 2);
 			exit(EXIT_SUCCESS);
 			return (0);
 		}

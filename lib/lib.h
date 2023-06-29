@@ -19,5 +19,6 @@ int _set_env(char *var, char ***);
 int _unset_env(char *var, char ***);
 int _puts(int, char *);
 int _putchar(int, char);
+void print_commands(char **clist, long csize);
 
 #endif
