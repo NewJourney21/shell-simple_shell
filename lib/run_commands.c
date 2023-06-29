@@ -11,7 +11,6 @@
  */
 int run_commands(char ***clist, long csize, char ***env)
 {
-	print_commands(*clist, csize);
 	if (append_path(clist, csize) == -1)
 	{
 		return (-1);
