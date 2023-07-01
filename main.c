@@ -46,12 +46,10 @@ int main(int ac, char **av, char **env)
 		{
 			_puts(2, "Error: too few arguments supplied\n");
 		}
-
 		else
 		{
 			non_interactive_mode(&clist, &csize, &env, ac, &av);
 		}
-
 	}
 	else
 	{
@@ -105,6 +103,7 @@ void exec(char **arr, int size, char ***env)
 			}
 		}
 	}
+	free_array(&clist, csize + 1);
 }
 
 /**
@@ -157,7 +156,6 @@ void run_interactive_mode(char ***clist, long *csize, char ***env)
 		else if (*line == '\0')
 		{
 			free(line);
-			_puts(1,  "\n");
 			continue;
 		}
 
@@ -169,11 +167,13 @@ void run_interactive_mode(char ***clist, long *csize, char ***env)
 
 		*csize = _strtok(clist, line, " ");
 		free(line);
-
-		if (exec_run_commands(clist, env) == 0)
+		if (*csize > 0)
 		{
-			open = 0;
-			continue;
+			if (exec_run_commands(clist, env) == 0)
+			{
+				open = 0;
+				continue;
+			}
 		}
 	}
 }
