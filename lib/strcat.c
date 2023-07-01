@@ -42,7 +42,7 @@ char *_strcat(char *s1, char *s2)
 	s1 = NULL;
 	s1 = _strcpy(s1, s);
 	free(s);
-	free(s2);
+	/*free(s2);*/
 
 	return (s1);
 }

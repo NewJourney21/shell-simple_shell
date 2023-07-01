@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 #include "lib.h"
 
-int exec_process(char **cmd);
+int exec_process(char *, char **cmd);
 int exec_custom_commands(char **cmd, char ***env);
 
 /**
@@ -20,21 +20,18 @@ int run(char **cmd, char ***env)
 	struct stat st;
 	int status, res;
 	pid_t cid;
+	char *path = "/bin/";
 
-	if (cmd == NULL || (cmd != NULL && cmd[0] == NULL))
+	path = _strcat(path, cmd[0]);
+	if (path == NULL)
 	{
 		return (-1);
 	}
 
-	if (_strcmp(cmd[0], "/bin/env") == 0 ||
-		_strcmp(cmd[0], "/bin/printenv") == 0)
+	if (_strcmp(path, "/bin/env") == 0 ||
+		_strcmp(path, "/bin/printenv") == 0)
 	{
 		_print_env(env);
-	}
-	else if (stat(cmd[0], &st) != 0)
-	{
-		res = exec_custom_commands(cmd, env);
-		return (res);
 	}
 	else
 	{
@@ -46,7 +43,11 @@ int run(char **cmd, char ***env)
 		}
 		else if (cid == 0)
 		{
-			res = exec_process(cmd);
+			if (stat(path, &st) != 0)
+			{
+				return (exec_custom_commands(cmd, env));
+			}
+			res = exec_process(path, cmd);
 			return (res);
 		}
 		else
@@ -54,18 +55,20 @@ int run(char **cmd, char ***env)
 			wait(&status);
 		}
 	}
+	free(path);
 	return (1);
 }
 
 /**
  * exec_process - function to execute a process
+ * @path: the bin path
  * @cmd: command array
  *
  * Return: an integer
  */
-int exec_process(char **cmd)
+int exec_process(char *path, char **cmd)
 {
-	if (execve(cmd[0], cmd, NULL) == -1)
+	if (execve(path, cmd, NULL) == -1)
 	{
 		exit(EXIT_FAILURE);
 		return (-1);
@@ -82,7 +85,7 @@ int exec_process(char **cmd)
  */
 int exec_custom_commands(char **cmd, char ***env)
 {
-	if (_strcmp(cmd[0], "/bin/setenv") == 0)
+	if (_strcmp(cmd[0], "setenv") == 0)
 	{
 		char *var = NULL;
 
@@ -94,32 +97,30 @@ int exec_custom_commands(char **cmd, char ***env)
 
 		var = _strcat(cmd[1], "=");
 		if (var == NULL)
-		{
 			return (-1);
-		}
 
 		var = _strcat(var, cmd[2]);
 		if (var == NULL)
-		{
 			return (-1);
-		}
 
 		return (_set_env(var, env));
 	}
-	else if (_strcmp(cmd[0], "/bin/unsetenv") == 0)
+	else if (_strcmp(cmd[0], "unsetenv") == 0)
 	{
 		if (cmd[1] == NULL || cmd[1][0] == '\0')
-		{
 			_puts(2, "Error:Usage: unset [name]\n");
-		}
 
 		return (_unset_env(cmd[1], env));
 	}
 	else
 	{
-		_puts(2, "bash: ");
-		_puts(2, cmd[0]);
-		_puts(2, ": command not found\n");
-		return (-1);
+		if (execve(cmd[0], cmd, NULL) == -1)
+		{
+			_puts(2, "bash: ");
+			_puts(2, cmd[0]);
+			_puts(2, ": command not found\n");
+			return (-1);
+		}
+		return (1);
 	}
 }

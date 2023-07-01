@@ -34,8 +34,13 @@ long _strtok(char ***arr, char *line, char *delim)
 		return (1);
 	}
 
-	while (!((*(line + i) == '\0') || (*(line + i) == '\n')))
+	while (!((*(line + i) == '\0')))
 	{
+		if (*(line + i) == '\n' && *(line + i + 1) == '\0')
+		{
+			*(line + i) = '\0';
+			break;
+		}
 		c = *(line + i);
 		if (c == *delim)
 			add_word(arr, &pos, word, &wc);

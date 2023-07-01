@@ -34,8 +34,8 @@ void test_run(char ***env)
 	}
 	else
 	{
-		run(arr, count, env);
+		run(arr, env);
 	}
 
-	printf("\nvalue: %s\n", s);
+	printf("\nvalue: %s (%d)\n", s, count);
 }

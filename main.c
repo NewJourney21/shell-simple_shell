@@ -17,9 +17,10 @@
 #include "lib/puts.c"
 #include "lib/print_commands.c"
 
+void exec(char **arr, int size, char ***);
 void non_interactive_mode(char ***, long *, char ***, int, char ***);
 void run_interactive_mode(char ***, long *, char ***);
-int exec_run_commands(char ***, long, char ***);
+int exec_run_commands(char ***, char ***);
 
 /**
  * main - entry point
@@ -58,8 +59,8 @@ int main(int ac, char **av, char **env)
 
 		if (ac == 1 && (*line != '\0'))
 		{
-			csize = _strtok(&clist, line, " ");
-			exec_run_commands(&clist, csize, &env);
+			csize = _strtok(&clist, line, "\n");
+			exec(clist, csize, &env);
 		}
 		else if (ac > 1)
 		{
@@ -77,6 +78,36 @@ int main(int ac, char **av, char **env)
 }
 
 /**
+ * exec - executes command
+ * @arr: an array of commands
+ * @size: the size of the array
+ * @env: the address of the environment variables
+ */
+void exec(char **arr, int size, char ***env)
+{
+	int i = 0;
+	long csize = 0;
+	char **clist = NULL;
+
+	for (i = 0; i < size; i++)
+	{
+		if (clist != NULL)
+		{
+			free_array(&clist, csize + 1);
+			clist = NULL;
+		}
+		if (arr[i] != NULL)
+		{
+			csize = _strtok(&clist, arr[i], " ");
+			if (csize > 0)
+			{
+				exec_run_commands(&clist, env);
+			}
+		}
+	}
+}
+
+/**
  * non_interactive_mode - function to run in interactive mode
  * @clist: the command list
  * @csize: the command size
@@ -91,7 +122,7 @@ void non_interactive_mode(
 
 	if (*csize != -1)
 	{
-		exec_run_commands(clist, *csize, env);
+		exec_run_commands(clist, env);
 	}
 	else
 	{
@@ -139,7 +170,7 @@ void run_interactive_mode(char ***clist, long *csize, char ***env)
 		*csize = _strtok(clist, line, " ");
 		free(line);
 
-		if (exec_run_commands(clist, *csize, env) == 0)
+		if (exec_run_commands(clist, env) == 0)
 		{
 			open = 0;
 			continue;
@@ -150,12 +181,11 @@ void run_interactive_mode(char ***clist, long *csize, char ***env)
 /**
  * exec_run_commands - function to execute run_commands
  * @clist: the command list
- * @csize: the array size
  * @env: the address of the environment variables
  *
  * Return: status
  */
-int exec_run_commands(char ***clist, long csize, char ***env)
+int exec_run_commands(char ***clist, char ***env)
 {
 	if (clist == NULL)
 	{
@@ -170,7 +200,7 @@ int exec_run_commands(char ***clist, long csize, char ***env)
 			return (0);
 		}
 
-		run_commands(clist, csize, env);
+		run(*clist, env);
 	}
 
 	return (1);
