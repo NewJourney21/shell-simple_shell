@@ -1,1 +1,2 @@
-Simple Shell
+
+shell: simple shell
